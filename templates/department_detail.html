@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ department.name }} - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>{{ department.name }}</h1>
+        <p>Expert care and advanced treatments</p>
+    </div>
+</section>
+
+<div class="container">
+    <div class="detail-content">
+        <!-- Department Info -->
+        <section class="dept-info">
+            <h2>About {{ department.name }}</h2>
+            {% if dept_image %}
+            <div style="text-align:center;margin:20px 0;">
+                <img src="{{ dept_image }}" alt="{{ department.name }}" style="max-width:200px;height:auto;object-fit:contain;">
+            </div>
+            {% endif %}
+            <p>{{ department.description }}</p>
+            {% if department.head_doctor %}
+                <p><strong>Department Head:</strong> {{ department.head_doctor }}</p>
+            {% endif %}
+        </section>
+
+        <!-- Services -->
+        {% if services %}
+        <section class="services-section">
+            <h2>Services & Treatments</h2>
+            <div class="services-list">
+                {% for service in services %}
+                <div class="service-item">
+                    <h3>{{ service.name }}</h3>
+                    <p>{{ service.description }}</p>
+                    {% if service.cost_estimate %}
+                        <p class="cost-info">Estimated Cost: <strong>₹{{ service.cost_estimate }}</strong></p>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Doctors -->
+        {% if doctors %}
+        <section class="doctors-section">
+            <h2>Our Specialists</h2>
+            <div class="doctors-grid">
+                {% for doctor in doctors %}
+                <div class="doctor-card">
+                    {% if doctor.image %}
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}">
+                    {% else %}
+                        <div class="doctor-placeholder">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                    {% endif %}
+                    <h3>Dr. {{ doctor.name }}</h3>
+                    <p class="qualification">{{ doctor.qualification }}</p>
+                    <p class="experience">{{ doctor.experience_years }} years experience</p>
+                    <p class="fee">Consultation Fee: ₹{{ doctor.consultation_fee }}</p>
+                    <a href="{% url 'hospital_system:doctor_detail' doctor.id %}" class="btn btn-primary">View Profile</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- CTA -->
+        <section class="cta-box">
+            <h2>Ready for Expert Care?</h2>
+            <p>Book an appointment with our specialists today</p>
+            <a href="{% url 'hospital_system:book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment</a>
+        </section>
+    </div>
+</div>
+
+{% endblock %}

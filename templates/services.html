@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Services - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Our Services</h1>
+        <p>Comprehensive healthcare services for all your needs</p>
+    </div>
+</section>
+
+<section class="services-section">
+    <div class="container">
+        <!-- Filters -->
+        <div class="filter-section">
+            <form method="get" class="filter-form">
+                <label for="department">Filter by Department:</label>
+                <select name="department" id="department" onchange="this.form.submit()">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.id }}" {% if dept.id|stringformat:"s" == selected_department %}selected{% endif %}>
+                            {{ dept.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+
+        <!-- Services Grid -->
+        <div class="services-grid-page">
+            {% for service in services %}
+            <div class="service-card-large">
+                <div class="service-header">
+                    <h3>{{ service.name }}</h3>
+                    <p class="department-label">{{ service.department.name }}</p>
+                </div>
+                <div class="service-body">
+                    <p>{{ service.description }}</p>
+                    {% if service.cost_estimate %}
+                        <p class="cost-estimate">
+                            <strong>Estimated Cost:</strong> 
+                            <span class="cost-value">₹{{ service.cost_estimate }}</span>
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="service-actions">
+                    <a href="{% url 'hospital_system:book_appointment' %}" class="btn btn-primary">Book Service</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No services found</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="services-cta">
+    <div class="container">
+        <h2>Need More Information About Our Services?</h2>
+        <p>Contact our healthcare consultants for personalized guidance</p>
+        <a href="{% url 'hospital_system:contact' %}" class="btn btn-primary btn-lg">Contact Us</a>
+    </div>
+</section>
+
+{% endblock %}

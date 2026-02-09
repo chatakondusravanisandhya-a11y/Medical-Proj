@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointment Confirmation - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="confirmation-section">
+    <div class="container">
+        <div class="confirmation-card">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Appointment Confirmed!</h1>
+            <p class="confirmation-message">Your appointment has been successfully scheduled.</p>
+
+            <div class="appointment-details">
+                <h2>Appointment Details</h2>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <label>Patient Name</label>
+                        <p>{{ appointment.patient_name }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Doctor</label>
+                        <p>Dr. {{ appointment.doctor.name }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Department</label>
+                        <p>{{ appointment.department.name }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Date</label>
+                        <p>{{ appointment.appointment_date|date:'l, M d, Y' }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Time</label>
+                        <p>{{ appointment.appointment_time }}</p>
+                    </div>
+                    <div class="detail-item">
+                        <label>Status</label>
+                        <p><span class="badge badge-success">{{ appointment.get_status_display }}</span></p>
+                    </div>
+                    <div class="detail-item full-width">
+                        <label>Reason for Visit</label>
+                        <p>{{ appointment.reason }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <h3>Important Information</h3>
+                <ul>
+                    <li>Please arrive 15 minutes before your appointment</li>
+                    <li>Bring all necessary medical documents</li>
+                    <li>A confirmation SMS/Email has been sent to {{ appointment.patient_phone }} and {{ appointment.patient_email }}</li>
+                    <li>For any changes, call us at the hospital contact number</li>
+                </ul>
+            </div>
+
+            <div class="next-steps">
+                <h3>Next Steps</h3>
+                <ol>
+                    <li>You will receive an SMS and Email confirmation</li>
+                    <li>Arrive 15 minutes early on the day of appointment</li>
+                    <li>Visit the registration counter with your ID</li>
+                    <li>Wait for your name to be called</li>
+                </ol>
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'hospital_system:home' %}" class="btn btn-primary">Back to Home</a>
+                <a href="{% url 'hospital_system:doctors' %}" class="btn btn-secondary">Browse More Doctors</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

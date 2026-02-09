@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Appointment - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Book an Appointment</h1>
+        <p>Schedule your visit with our expert doctors</p>
+    </div>
+</section>
+
+<section class="booking-section">
+    <div class="container">
+        <div class="booking-form-container">
+            <div class="booking-steps">
+                <h2>Quick Appointment Booking</h2>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="post" class="booking-form">
+                {% csrf_token %}
+                
+                <fieldset>
+                    <legend>Patient Information</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient_name">Full Name *</label>
+                            <input type="text" id="patient_name" name="patient_name" required 
+                                   value="{{ form_data.patient_name|default:'' }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="patient_email">Email *</label>
+                            <input type="email" id="patient_email" name="patient_email" required
+                                   value="{{ form_data.patient_email|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="patient_phone">Phone Number *</label>
+                            <input type="tel" id="patient_phone" name="patient_phone" required
+                                   value="{{ form_data.patient_phone|default:'' }}">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Appointment Details</legend>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department *</label>
+                            <select id="department" name="department" required onchange="updateDoctors()">
+                                <option value="">Select Department</option>
+                                {% for dept in departments %}
+                                    <option value="{{ dept.id }}" {% if form_data.department_id|stringformat:"s" == dept.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ dept.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="doctor">Doctor *</label>
+                            <select id="doctor" name="doctor" required>
+                                <option value="">Select Doctor</option>
+                                {% for doctor in doctors %}
+                                    <option value="{{ doctor.id }}" {% if form_data.doctor_id|stringformat:"s" == doctor.id|stringformat:"s" %}selected{% endif %}>
+                                        Dr. {{ doctor.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="appointment_date">Appointment Date *</label>
+                            <select id="appointment_date" name="appointment_date" required onchange="updateTimeSlots()">
+                                <option value="">Select Date</option>
+                                {% for date in available_dates %}
+                                    <option value="{{ date|date:'Y-m-d' }}" {% if form_data.appointment_date|stringformat:"s" == date|date:"Y-m-d"|stringformat:"s" %}selected{% endif %}>
+                                        {{ date|date:'l, M d, Y' }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="appointment_time">Time Slot *</label>
+                            <select id="appointment_time" name="appointment_time" required>
+                                <option value="">Select Time</option>
+                                {% for time in available_times %}
+                                    <option value="{{ time }}" {% if form_data.appointment_time == time %}selected{% endif %}>
+                                        {{ time }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="reason">Reason for Visit *</label>
+                        <textarea id="reason" name="reason" required rows="4">{{ form_data.reason|default:'' }}</textarea>
+                    </div>
+                </fieldset>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">Book Appointment</button>
+                    <a href="{% url 'hospital_system:home' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Benefits Box -->
+        <div class="booking-benefits">
+            <h3>Why Book with Us?</h3>
+            <ul>
+                <li><i class="fas fa-check"></i> Easy Online Booking</li>
+                <li><i class="fas fa-check"></i> Expert Doctors</li>
+                <li><i class="fas fa-check"></i> Instant Confirmation</li>
+                <li><i class="fas fa-check"></i> No Waiting Time</li>
+                <li><i class="fas fa-check"></i> Secure & Safe</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function updateDoctors() {
+    const deptId = document.getElementById('department').value;
+    if (deptId) {
+        fetch(`/api/doctors-by-department/${deptId}/`)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('doctor');
+                select.innerHTML = '<option value="">Select Doctor</option>';
+                data.doctors.forEach(doctor => {
+                    select.appendChild(new Option(doctor.name, doctor.id));
+                });
+            });
+    }
+}
+
+function updateTimeSlots() {
+    const doctorId = document.getElementById('doctor').value;
+    const date = document.getElementById('appointment_date').value;
+    if (doctorId && date) {
+        fetch(`/api/available-slots/?doctor=${doctorId}&date=${date}`)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById('appointment_time');
+                select.innerHTML = '<option value="">Select Time</option>';
+                data.available_times.forEach(time => {
+                    select.appendChild(new Option(time, time));
+                });
+            });
+    }
+}
+</script>
+{% endblock %}

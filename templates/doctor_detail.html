@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Dr. {{ doctor.name }} - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="doctor-detail-page">
+    <div class="container">
+        <div class="doctor-detail-container">
+            <!-- Left Side - Doctor Info -->
+            <div class="doctor-detail-left">
+                    {% if doctor.image %}
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}" class="doctor-detail-image">
+                    {% else %}
+                        <img src="{{ fallback_doctor_image }}" alt="Dr. {{ doctor.name }}" class="doctor-detail-image" style="object-fit:cover;">
+                    {% endif %}
+                <div class="doctor-contact-info">
+                    <h3>Contact Information</h3>
+                    <p><strong>Email:</strong> <a href="mailto:{{ doctor.email }}">{{ doctor.email }}</a></p>
+                    <p><strong>Phone:</strong> <a href="tel:{{ doctor.phone }}">{{ doctor.phone }}</a></p>
+                    <p><strong>Availability:</strong> {{ doctor.availability }}</p>
+                    <div class="status-badge" {% if doctor.is_available %}style="background-color: #27ae60;"{% else %}style="background-color: #e74c3c;"{% endif %}>
+                        {% if doctor.is_available %}
+                            <i class="fas fa-check-circle"></i> Available
+                        {% else %}
+                            <i class="fas fa-times-circle"></i> Not Available
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Details -->
+            <div class="doctor-detail-right">
+                <h1>Dr. {{ doctor.name }}</h1>
+                <p class="specialty-badge">{{ doctor.specialization }}</p>
+
+                <section class="detail-section">
+                    <h2>Professional Details</h2>
+                    <ul>
+                        <li><strong>Qualification:</strong> {{ doctor.qualification }}</li>
+                        <li><strong>Specialization:</strong> {{ doctor.specialization }}</li>
+                        <li><strong>Experience:</strong> {{ doctor.experience_years }} years</li>
+                        <li><strong>Gender:</strong> {{ doctor.get_gender_display }}</li>
+                        <li><strong>Consultation Fee:</strong> ₹{{ doctor.consultation_fee }}</li>
+                    </ul>
+                </section>
+
+                {% if doctor.bio %}
+                <section class="detail-section">
+                    <h2>About Doctor</h2>
+                    <p>{{ doctor.bio }}</p>
+                </section>
+                {% endif %}
+
+                <section class="detail-section appointment-section">
+                    <h2>Book an Appointment</h2>
+                    <p>Available Dates: Next 30 days</p>
+                    <p>Available Times: 9:00 AM - 5:00 PM (30-minute slots)</p>
+                    <a href="{% url 'hospital_system:book_appointment' %}?doctor={{ doctor.id }}" class="btn btn-primary btn-lg">Reserve Your Slot</a>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Doctors - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Our Doctors</h1>
+        <p>Meet our team of experienced specialists</p>
+    </div>
+</section>
+
+<section class="doctors-listing">
+    <div class="container">
+        <!-- Filters -->
+        <div class="filters-section">
+            <form method="get" class="filter-form">
+                <div class="filter-group">
+                    <label for="department">Filter by Department:</label>
+                    <select name="department" id="department" onchange="this.form.submit()">
+                        <option value="">All Departments</option>
+                        {% for dept in departments %}
+                            <option value="{{ dept.id }}" {% if dept.id|stringformat:"s" == selected_department %}selected{% endif %}>
+                                {{ dept.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="search">Search Doctor:</label>
+                    <input type="text" name="search" id="search" placeholder="Name or qualification" value="{{ search }}">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Doctors Grid -->
+        <div class="doctors-grid-large">
+            {% for doctor in doctors %}
+            <div class="doctor-profile-card">
+                <div class="doctor-image-container">
+                    {% if doctor.image %}
+                        <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}">
+                    {% else %}
+                        <img src="{{ fallback_doctor_image }}" alt="Dr. {{ doctor.name }}" style="width:100%;height:100%;object-fit:cover;">
+                    {% endif %}
+                    {% if doctor.is_available %}
+                        <span class="availability-badge available">Available</span>
+                    {% else %}
+                        <span class="availability-badge unavailable">Unavailable</span>
+                    {% endif %}
+                </div>
+                <div class="doctor-info">
+                    <h3>Dr. {{ doctor.name }}</h3>
+                    <p class="specialty">{{ doctor.specialization }}</p>
+                    <p class="qualification">{{ doctor.qualification }}</p>
+                    <p class="experience"><i class="fas fa-briefcase"></i> {{ doctor.experience_years }} Years Experience</p>
+                    <p class="gender"><i class="fas fa-venus" if doctor.gender == 'F' else "fas fa-mars"></i> {{ doctor.get_gender_display }}</p>
+                    <p class="availability"><i class="fas fa-clock"></i> {{ doctor.availability }}</p>
+                    <p class="fee"><strong>Consultation Fee:</strong> ₹{{ doctor.consultation_fee }}</p>
+                    {% if doctor.bio %}
+                        <p class="bio">{{ doctor.bio|truncatewords:20 }}</p>
+                    {% endif %}
+                </div>
+                <div class="doctor-actions">
+                    <a href="{% url 'hospital_system:doctor_detail' doctor.id %}" class="btn btn-primary">View Profile</a>
+                    <a href="{% url 'hospital_system:book_appointment' %}?doctor={{ doctor.id }}" class="btn btn-secondary">Book Appointment</a>
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-results">No doctors found matching your criteria.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

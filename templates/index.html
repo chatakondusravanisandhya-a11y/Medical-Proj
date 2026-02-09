@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero" style="background-image: linear-gradient(135deg, rgba(0,166,153,0.9) 0%, rgba(0,128,128,0.9) 100%), url('https://cdn.apollohospitals.com/chennai/2024/06/Robotics.webp'); background-size: cover; background-position: center;">
+    <div class="hero-content">
+        <h1>Welcome to Apollo Medical Center</h1>
+        <p>30+ Years of Excellence in Multi-Specialty Healthcare</p>
+        <a href="{% url 'hospital_system:book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment Now</a>
+    </div>
+</section>
+
+<!-- Why Choose Us -->
+<section class="why-choose-us">
+    <div class="container">
+        <h2>Why Choose Apollo Medical Center?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-award"></i>
+                <h3>30+ Years Experience</h3>
+                <p>Thousands of successful surgeries and treatments every year</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-robot"></i>
+                <h3>Cutting-Edge Technology</h3>
+                <p>Minimally invasive and robotic-assisted procedures</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-user-md"></i>
+                <h3>Expert Specialists</h3>
+                <p>Dedicated team of specialist doctors and multidisciplinary experts</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-24/7"></i>
+                <h3>24/7 Emergency Care</h3>
+                <p>Round-the-clock emergency and critical care support</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Centers of Excellence -->
+<section class="centers-of-excellence">
+    <div class="container">
+        <h2>Centers of Excellence</h2>
+        <div class="departments-grid">
+            {% for item in departments_with_images %}
+            <div class="dept-card">
+                <div class="dept-icon">
+                    <img src="{{ item.image }}" alt="{{ item.dept.name }}" style="width:64px;height:64px;object-fit:contain;">
+                </div>
+                <h3>{{ item.dept.name }}</h3>
+                <p>{{ item.dept.description|truncatewords:15 }}</p>
+                <a href="{% url 'hospital_system:department_detail' item.dept.id %}" class="btn btn-secondary">Learn More</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Infrastructure -->
+<section class="infrastructure">
+    <div class="container">
+        <h2>Our Infrastructure</h2>
+        <div class="infrastructure-grid">
+            {% for infra in infrastructure %}
+            <div class="infra-card">
+                <i class="fas fa-{{ infra.icon }}"></i>
+                <h3>{{ infra.name }}</h3>
+                <p>{{ infra.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Free Cost Estimate Section -->
+<section class="cost-estimate-section">
+    <div class="container">
+        <div class="estimate-box">
+            <h2>Get Free Cost Estimate</h2>
+            <p>No Hidden Charges • Quick Response • Insurance Assistance</p>
+            <form action="{% url 'hospital_system:cost_estimate' %}" method="post" class="estimate-form">
+                {% csrf_token %}
+                <div class="form-row">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-row">
+                    <input type="tel" name="phone" placeholder="Phone Number" required>
+                    <input type="text" name="service" placeholder="Service/Treatment" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Get Free Estimate</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+{% if testimonials %}
+<section class="testimonials">
+    <div class="container">
+        <h2>Patient Testimonials</h2>
+        <div class="testimonials-grid">
+            {% for testimonial in testimonials %}
+            <div class="testimonial-card">
+                <div class="rating">
+                    {% for i in "x"|rjust:"5" %}
+                        {% if forloop.counter <= testimonial.rating %}
+                            <i class="fas fa-star"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <p>{{ testimonial.patient_message }}</p>
+                <h4>{{ testimonial.patient_name }}</h4>
+                {% if testimonial.doctor %}
+                    <span class="doctor-name">Dr. {{ testimonial.doctor.name }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action -->
+<section class="cta-section">
+    <div class="container">
+        <h2>Ready to Take the First Step Towards Better Health?</h2>
+        <p>Our team of expert doctors is ready to assist you</p>
+        <div class="cta-buttons">
+            <a href="{% url 'hospital_system:book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment</a>
+            <a href="{% url 'hospital_system:contact' %}" class="btn btn-secondary btn-lg">Contact Us</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

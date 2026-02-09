@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Cost Estimate - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="cost-result-section">
+    <div class="container">
+        {% if estimate %}
+        <div class="estimate-card">
+            <h1>Cost Estimate</h1>
+            <div class="estimate-details">
+                <h2>{{ service.name }}</h2>
+                <p>{{ service.description }}</p>
+                <p class="department">Department: <strong>{{ service.department.name }}</strong></p>
+                
+                <div class="estimate-box">
+                    <h3>Estimated Cost</h3>
+                    <p class="cost-value">₹{{ estimate }}</p>
+                    <div class="cost-note">
+                        <p><strong>Note:</strong> This is an estimated cost. Final charges may vary based on individual treatment requirements and medical condition.</p>
+                    </div>
+                </div>
+
+                <div class="includes-box">
+                    <h3>What's Included</h3>
+                    <ul>
+                        <li>Expert consultation</li>
+                        <li>Treatment by specialist doctors</li>
+                        <li>Medical facilities and equipment</li>
+                        <li>Post-treatment follow-up</li>
+                    </ul>
+                </div>
+
+                <div class="next-steps">
+                    <h3>Next Steps</h3>
+                    <ol>
+                        <li>Book an appointment with relevant specialist</li>
+                        <li>Get detailed consultation</li>
+                        <li>Finalize treatment plan</li>
+                        <li>Begin your treatment journey</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="estimate-actions">
+                <a href="{% url 'hospital_system:book_appointment' %}" class="btn btn-primary btn-lg">Book Appointment</a>
+                <a href="{% url 'hospital_system:contact' %}" class="btn btn-secondary">Get More Help</a>
+            </div>
+        </div>
+        {% else %}
+        <div class="no-estimate">
+            <p>No cost estimate available for this service. Please contact us for more information.</p>
+            <a href="{% url 'hospital_system:cost_estimate' %}" class="btn btn-primary">Go Back</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

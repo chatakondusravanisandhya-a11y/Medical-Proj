@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Create Account</h1>
+        <p>Register to book appointments and manage your profile</p>
+    </div>
+</section>
+
+<section class="booking-section">
+    <div class="container">
+        <div class="booking-form-container">
+            <h2>Register</h2>
+            <form method="post" class="booking-form">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_username">Username</label>
+                        {{ form.username }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_email">Email</label>
+                        {{ form.email }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_first_name">First Name</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_last_name">Last Name</label>
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_password1">Password</label>
+                        {{ form.password1 }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_password2">Confirm Password</label>
+                        {{ form.password2 }}
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                    <a href="{% url 'hospital_system:login' %}" class="btn btn-secondary">Already have an account?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

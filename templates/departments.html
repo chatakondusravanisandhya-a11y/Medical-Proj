@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Departments - Apollo Medical Center{% endblock %}
+
+{% block content %}
+<section class="page-header">
+    <div class="container">
+        <h1>Our Departments</h1>
+        <p>Comprehensive specialist care across multiple disciplines</p>
+    </div>
+</section>
+
+<section class="departments-section">
+    <div class="container">
+        <div class="departments-grid">
+            {% for item in departments_with_images %}
+            <div class="dept-card-large">
+                <div class="dept-header" style="background-image: url('{{ item.image }}'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+                    <h2 style="margin-top:40px">{{ item.dept.name }}</h2>
+                </div>
+                <div class="dept-body">
+                    <p>{{ item.dept.description }}</p>
+                    {% if item.dept.head_doctor %}
+                        <p class="head-doctor"><strong>Department Head:</strong> {{ item.dept.head_doctor }}</p>
+                    {% endif %}
+                </div>
+                <div class="dept-footer">
+                    <a href="{% url 'hospital_system:department_detail' item.dept.id %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No departments available</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}

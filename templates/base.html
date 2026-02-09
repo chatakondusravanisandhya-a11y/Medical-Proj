@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Apollo Medical Center{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <a href="{% url 'hospital_system:home' %}">
+                    <i class="fas fa-hospital"></i> Apollo Medical Center
+                </a>
+            </div>
+            <ul class="navbar-menu">
+                <li><a href="{% url 'hospital_system:home' %}">Home</a></li>
+                <li><a href="{% url 'hospital_system:departments' %}">Departments</a></li>
+                <li><a href="{% url 'hospital_system:doctors' %}">Doctors</a></li>
+                <li><a href="{% url 'hospital_system:services' %}">Services</a></li>
+                <li><a href="{% url 'hospital_system:about' %}">About</a></li>
+                <li><a href="{% url 'hospital_system:contact' %}">Contact</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="#">Hello, {{ user.username }}</a></li>
+                    <li><a href="{% url 'hospital_system:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'hospital_system:login' %}">Login</a></li>
+                    <li><a href="{% url 'hospital_system:register' %}">Register</a></li>
+                {% endif %}
+                <li class="highlight"><a href="{% url 'hospital_system:book_appointment' %}">Book Appointment</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Apollo Medical Center</h3>
+                    <p>Providing excellence in healthcare with cutting-edge technology and dedicated medical professionals.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="{% url 'hospital_system:home' %}">Home</a></li>
+                        <li><a href="{% url 'hospital_system:departments' %}">Departments</a></li>
+                        <li><a href="{% url 'hospital_system:doctors' %}">Doctors</a></li>
+                        <li><a href="{% url 'hospital_system:services' %}">Services</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    {% if hospital %}
+                        <p><i class="fas fa-phone"></i> {{ hospital.phone }}</p>
+                        <p><i class="fas fa-envelope"></i> {{ hospital.email }}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> {{ hospital.location }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Apollo Medical Center. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
