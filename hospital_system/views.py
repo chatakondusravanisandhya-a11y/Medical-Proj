@@ -7,34 +7,63 @@ from .models import (
     Hospital, Department, Doctor, Patient, Appointment, 
     Service, Infrastructure, Testimonial
 )
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
 from .forms import UserRegistrationForm
 
 
+# Landing Page (Public)
+def landing(request):
+    """Landing page with login and registration for public visitors"""
+    if request.user.is_authenticated:
+        return redirect('hospital_system:home')
+    
+    hospital = Hospital.objects.first()
+    context = {
+        'hospital': hospital,
+    }
+    return render(request, 'landing.html', context)
+
+
+# Custom Login View for Landing Page
+def login_user(request):
+    """Handle user login from landing page"""
+    if request.user.is_authenticated:
+        return redirect('hospital_system:home')
+    
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('hospital_system:home')
+        else:
+            return render(request, 'landing.html', {
+                'hospital': Hospital.objects.first(),
+                'error': 'Invalid username or password',
+            })
+    
+    return redirect('hospital_system:landing')
+
+
 # Home View
+@login_required(login_url='hospital_system:landing')
 def home(request):
-    """Home page with hospital info and departments"""
+    """Home page with hospital info and departments - requires login"""
     hospital = Hospital.objects.first()
     departments = Department.objects.all()
     infrastructure = Infrastructure.objects.all()
     testimonials = Testimonial.objects.filter(is_published=True)[:6]
-    # Map department names to representative images (Apollo CDN / public images)
-    dept_images = {
-        'Cardiology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/cardiology_icon.svg',
-        'Cancer': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/oncology_icon.svg',
-        'Orthopedics': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/orthopaedic.svg',
-        'Gastroenterology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/gastroenterology.svg',
-        'Pulmonology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/pulmonology.svg',
-        'Urology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/urology.svg',
-        'Nephrology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/neurology.svg',
-    }
-
+    
     default_dept_image = 'https://images.unsplash.com/photo-1580281657526-3e6a4e8f2d56?auto=format&fit=crop&w=800&q=60'
 
-    # Build a list of departments with fallback images for easier template rendering
+    # Build a list of departments with images from model
     departments_with_images = []
     for d in departments:
-        img = dept_images.get(d.name, default_dept_image)
+        # Use department's image if available, otherwise use default
+        img = d.image.url if d.image else default_dept_image
         departments_with_images.append({'dept': d, 'image': img})
 
     # Fallback doctor image (used when doctor.image is not provided)
@@ -55,16 +84,11 @@ def home(request):
 def departments(request):
     """List all departments"""
     departments = Department.objects.all()
-    # same image mapping as home
-    dept_images = {
-        'Cardiology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/cardiology_icon.svg',
-        'Cancer': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/oncology_icon.svg',
-        'Orthopedics': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/orthopaedic.svg',
-    }
     default_dept_image = 'https://images.unsplash.com/photo-1580281657526-3e6a4e8f2d56?auto=format&fit=crop&w=800&q=60'
     departments_with_images = []
     for d in departments:
-        img = dept_images.get(d.name, default_dept_image)
+        # Use department's image if available, otherwise use default
+        img = d.image.url if d.image else default_dept_image
         departments_with_images.append({'dept': d, 'image': img})
     return render(request, 'departments.html', {'departments_with_images': departments_with_images})
 
@@ -74,13 +98,9 @@ def department_detail(request, pk):
     department = get_object_or_404(Department, pk=pk)
     services = Service.objects.filter(department=department)
     doctors = Doctor.objects.filter(specialization=department)
-    # department image fallback
-    dept_images = {
-        'Cardiology': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/cardiology_icon.svg',
-        'Cancer': 'https://www.apollohospitals.com/corporate/wp-content/themes/apollohospitals/assets-v3/images/oncology_icon.svg',
-    }
+    # Use department's image, default to unsplash
     default_dept_image = 'https://images.unsplash.com/photo-1580281657526-3e6a4e8f2d56?auto=format&fit=crop&w=800&q=60'
-    dept_image = dept_images.get(department.name, default_dept_image)
+    dept_image = department.image.url if department.image else default_dept_image
 
     context = {
         'department': department,
@@ -380,7 +400,56 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            return redirect('hospital_system:login')
+            # Auto-login the user after registration
+            login(request, user)
+            return redirect('hospital_system:home')
     else:
         form = UserRegistrationForm()
     return render(request, 'register.html', {'form': form})
+
+
+# Patient Dashboard (Profile)
+@login_required(login_url='hospital_system:landing')
+def patient_dashboard(request):
+    """Patient dashboard showing appointments and profile"""
+    try:
+        patient = request.user.patient
+    except Patient.DoesNotExist:
+        # Handle case where user doesn't have a patient profile (shouldn't happen with new registration)
+        return redirect('hospital_system:home')
+    
+    # Get user's appointments
+    appointments = Appointment.objects.filter(
+        patient_email=patient.email
+    ).order_by('-appointment_date')
+    
+    context = {
+        'patient': patient,
+        'appointments': appointments,
+    }
+    return render(request, 'patient_dashboard.html', context)
+
+
+# Update Patient Profile
+@login_required(login_url='hospital_system:landing')
+def update_profile(request):
+    """Update patient profile"""
+    try:
+        patient = request.user.patient
+    except Patient.DoesNotExist:
+        return redirect('hospital_system:home')
+    
+    if request.method == 'POST':
+        patient.phone = request.POST.get('phone', patient.phone)
+        patient.date_of_birth = request.POST.get('date_of_birth', patient.date_of_birth)
+        patient.gender = request.POST.get('gender', patient.gender)
+        patient.blood_group = request.POST.get('blood_group', patient.blood_group)
+        patient.address = request.POST.get('address', patient.address)
+        patient.emergency_contact = request.POST.get('emergency_contact', patient.emergency_contact)
+        patient.emergency_phone = request.POST.get('emergency_phone', patient.emergency_phone)
+        patient.save()
+        
+        return redirect('hospital_system:patient_dashboard')
+    
+    context = {'patient': patient}
+    return render(request, 'update_profile.html', context)

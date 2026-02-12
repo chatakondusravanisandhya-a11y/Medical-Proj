@@ -1,0 +1,278 @@
+/* ===========================
+   PREMIUM ENHANCEMENTS & ANIMATIONS
+   For Arogya Medical Center
+   =========================== */
+
+/* Smooth Page Transitions */
+body {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scroll Reveal Animation for Cards */
+.feature-card,
+.dept-card,
+.doctor-profile-card,
+.testimonial-card,
+.stat-card {
+    animation: slideInUp 0.6s ease-out backwards;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+.dept-card:nth-child(1) { animation-delay: 0.1s; }
+.dept-card:nth-child(2) { animation-delay: 0.2s; }
+.dept-card:nth-child(3) { animation-delay: 0.3s; }
+.dept-card:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Hover Effects Enhancement */
+.doctor-profile-card {
+    perspective: 1000px;
+}
+
+.doctor-profile-card:hover {
+    transform: translateY(-10px) scale(1.02);
+}
+
+/* Image Optimization */
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Smooth Link Transitions */
+a {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Button Glow on Hover */
+.btn-primary:hover,
+.btn-secondary:hover {
+    boxShadow: 0 20px 40px rgba(0, 102, 204, 0.4);
+}
+
+/* Navbar Scroll Effect */
+.navbar {
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar.scrolled {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Section Title Animation */
+h1, h2, h3 {
+    letter-spacing: -0.5px;
+}
+
+/* Form Input Smooth Transitions */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+    transition: all 0.3s ease;
+}
+
+/* Doctor Card Image Zoom */
+.doctor-image-container img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doctor-profile-card:hover .doctor-image-container img {
+    transform: scale(1.08);
+}
+
+/* Department Card Glow */
+.dept-card {
+    position: relative;
+}
+
+.dept-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.dept-card:hover::after {
+    opacity: 1;
+}
+
+/* Premium Shadows for Depth */
+.shadow-sm {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-md {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.shadow-lg {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.shadow-xl {
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Text Gradient Effect */
+.gradient-text {
+    background: linear-gradient(135deg, #0066cc 0%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Badge Styles */
+.badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #0066cc 0%, #004399 100%);
+    color: white;
+}
+
+.badge-success {
+    background: #10b981;
+    color: white;
+}
+
+.badge-secondary {
+    background: #ff6b6b;
+    color: white;
+}
+
+/* Responsive Image Container */
+.image-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Overlay Effect */
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container:hover .overlay {
+    opacity: 1;
+}
+
+/* Premium Typography */
+.text-gradient {
+    background: linear-gradient(135deg, #0066cc 0%, #00d4ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Icon Animations */
+i.fas {
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover i,
+.dept-card:hover i,
+.infra-card:hover i {
+    transform: translateY(-5px) rotate(5deg);
+    color: #00d4ff;
+}
+
+/* Success & Error States */
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
+    border-color: #10b981;
+}
+
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: #ef4444;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .footer,
+    .cta-section {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+}

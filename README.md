@@ -1,4 +1,4 @@
-# Apollo Medical Center - Hospital Management System
+# Arogya Medical Center - Hospital Management System
 
 A comprehensive Django-based medical tech project with a professional frontend inspired by Apollo Hospitals. This system includes hospital management, doctor profiles, appointment booking, and patient management features.
 
@@ -120,7 +120,7 @@ from hospital_system.models import Hospital, Department, Doctor, Service, Infras
 
 # Create Hospital
 hospital = Hospital.objects.create(
-    name="Apollo Medical Center",
+    name="Arogya Medical Center",
     location="Ahmedabad, Gujarat",
     phone="9876543210",
     email="info@apollomedical.com",

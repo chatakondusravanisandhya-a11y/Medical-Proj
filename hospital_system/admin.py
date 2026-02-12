@@ -1,8 +1,27 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
 from .models import (
     Hospital, Department, Doctor, Patient, Appointment,
     Service, Infrastructure, Testimonial
 )
+
+
+# Inline admin for Patient linked to User
+class PatientInline(admin.StackedInline):
+    model = Patient
+    fields = ('phone', 'date_of_birth', 'gender', 'blood_group', 'address', 'medical_history', 'emergency_contact', 'emergency_phone')
+    extra = 0
+
+
+# Extend the User admin to include Patient information
+class UserAdmin(BaseUserAdmin):
+    inlines = (PatientInline,)
+
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 
 @admin.register(Hospital)
@@ -13,17 +32,35 @@ class HospitalAdmin(admin.ModelAdmin):
 
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name', 'head_doctor', 'created_at')
+    list_display = ('name', 'head_doctor', 'created_at', 'get_image_preview')
     search_fields = ('name',)
     list_filter = ('created_at',)
+    fields = ('name', 'description', 'icon', 'image', 'head_doctor')
+    readonly_fields = ('get_image_preview',)
+    
+    def get_image_preview(self, obj):
+        if obj.image:
+            from django.utils.html import format_html
+            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
+        return 'No image'
+    get_image_preview.short_description = 'Image Preview'
 
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'specialization', 'experience_years', 'consultation_fee', 'is_available')
+    list_display = ('name', 'specialization', 'experience_years', 'consultation_fee', 'is_available', 'get_image_preview')
     search_fields = ('name', 'qualification')
     list_filter = ('specialization', 'is_available', 'gender')
-    readonly_fields = ('name', 'email', 'phone')
+    readonly_fields = ('name', 'email', 'phone', 'get_image_preview')
+    fields = ('name', 'email', 'phone', 'qualification', 'specialization', 'experience_years', 
+              'consultation_fee', 'gender', 'availability', 'bio', 'image', 'get_image_preview', 'is_available')
+    
+    def get_image_preview(self, obj):
+        if obj.image:
+            from django.utils.html import format_html
+            return format_html('<img src="{}" width="100" height="100" style="border-radius: 5px;" />', obj.image.url)
+        return 'No image'
+    get_image_preview.short_description = 'Image Preview'
 
 
 @admin.register(Patient)

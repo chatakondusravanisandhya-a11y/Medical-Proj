@@ -1,0 +1,409 @@
+{% extends 'auth_base.html' %}
+
+{% block title %}the Arogya Medical Center{% endblock %}
+
+{% block content %}
+<div class="landing-page">
+    <div class="landing-container">
+        <!-- Left Side - About Hospital -->
+        <div class="landing-left">
+            <div class="landing-content">
+                <div class="landing-logo">
+                    <i class="fas fa-hospital" style="font-size: 4rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h1>the Arogya Medical Center</h1>
+                    <p class="tagline">Excellence in Healthcare</p>
+                </div>
+                
+                <div class="landing-info">
+                    <h2>Welcome to Arogya Medical Center</h2>
+                    <p>30+ years of excellence in multi-specialty healthcare</p>
+                    
+                    <div class="landing-features">
+                        <div class="feature">
+                            <i class="fas fa-award"></i>
+                            <h4>Expert Doctors</h4>
+                            <p>Team of experienced specialists</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-hospital"></i>
+                            <h4>Modern Facilities</h4>
+                            <p>State-of-the-art medical technology</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-heartbeat"></i>
+                            <h4>24/7 Emergency</h4>
+                            <p>Round-the-clock care available</p>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-handshake"></i>
+                            <h4>Patient Care</h4>
+                            <p>Your health is our priority</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Auth Forms -->
+        <div class="landing-right">
+            <div class="landing-auth">
+                <!-- Login Form Tab -->
+                <div class="auth-tabs">
+                    <button class="tab-btn active" onclick="showTab('login')">Sign In</button>
+                    <button class="tab-btn" onclick="showTab('register')">Create Account</button>
+                </div>
+
+                {% if error %}
+                <div class="alert alert-danger" style="margin-bottom: 1rem; padding: 1rem; background-color: #fee; border: 1px solid #fcc; border-radius: 0.5rem; color: #c33;">
+                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <!-- Login Tab Content -->
+                <div id="login" class="tab-content active">
+                    <div class="form-header">
+                        <h3>Welcome Back</h3>
+                        <p>Sign in to your account</p>
+                    </div>
+
+                    <form method="post" action="{% url 'hospital_system:login' %}" class="auth-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="id_username">Username</label>
+                            <input type="text" id="id_username" name="username" required class="form-control" placeholder="Enter your username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_password">Password</label>
+                            <input type="password" id="id_password" name="password" required class="form-control" placeholder="Enter your password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+
+                        <div class="form-footer">
+                            <p>Don't have an account? <a href="#" onclick="showTab('register'); return false;">Create one</a></p>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Register Tab Content -->
+                <div id="register" class="tab-content">
+                    <div class="form-header">
+                        <h3>Create Account</h3>
+                        <p>Join us to book appointments</p>
+                    </div>
+
+                    <form method="post" action="{% url 'hospital_system:register' %}" class="auth-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="id_username_reg">Username</label>
+                            <input type="text" id="id_username_reg" name="username" required class="form-control" placeholder="Choose a username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_email_reg">Email</label>
+                            <input type="email" id="id_email_reg" name="email" required class="form-control" placeholder="Enter your email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_first_name">First Name</label>
+                            <input type="text" id="id_first_name" name="first_name" required class="form-control" placeholder="First name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_last_name">Last Name</label>
+                            <input type="text" id="id_last_name" name="last_name" required class="form-control" placeholder="Last name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_password1_reg">Password</label>
+                            <input type="password" id="id_password1_reg" name="password1" required class="form-control" placeholder="Create a password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_password2_reg">Confirm Password</label>
+                            <input type="password" id="id_password2_reg" name="password2" required class="form-control" placeholder="Confirm password">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+
+                        <div class="form-footer">
+                            <p>Already have an account? <a href="#" onclick="showTab('login'); return false;">Sign in</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .landing-page {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem 0;
+    }
+
+    .landing-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        max-width: 1200px;
+        width: 100%;
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .landing-left, .landing-right {
+        padding: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .landing-left {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .landing-logo {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .landing-logo h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 1rem 0;
+    }
+
+    .tagline {
+        font-size: 1.1rem;
+        opacity: 0.9;
+    }
+
+    .landing-info h2 {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .landing-info > p {
+        font-size: 0.95rem;
+        opacity: 0.95;
+        margin-bottom: 2rem;
+    }
+
+    .landing-features {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+    }
+
+    .feature {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .feature i {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .feature h4 {
+        font-size: 0.95rem;
+        margin: 0.5rem 0;
+    }
+
+    .feature p {
+        font-size: 0.85rem;
+        opacity: 0.9;
+    }
+
+    .landing-right {
+        background: #f8f9fa;
+    }
+
+    .landing-auth {
+        width: 100%;
+    }
+
+    .auth-tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .tab-btn {
+        flex: 1;
+        padding: 1rem;
+        background: none;
+        border: none;
+        font-size: 1rem;
+        font-weight: 600;
+        color: #666;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+    }
+
+    .tab-btn:hover {
+        color: #667eea;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-header h3 {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-header p {
+        color: #666;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .btn-block {
+        width: 100%;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .form-footer {
+        margin-top: 1.5rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .form-footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .form-footer a:hover {
+        text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+        .landing-container {
+            grid-template-columns: 1fr;
+        }
+
+        .landing-left, .landing-right {
+            padding: 2rem;
+        }
+
+        .landing-features {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-tabs {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+function showTab(tabName) {
+    // Hide all tabs
+    const tabs = document.querySelectorAll('.tab-content');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Remove active class from buttons
+    const buttons = document.querySelectorAll('.tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    
+    // Show selected tab
+    document.getElementById(tabName).classList.add('active');
+    
+    // Add active class to clicked button
+    event.target.classList.add('active');
+}
+</script>
+{% endblock %}

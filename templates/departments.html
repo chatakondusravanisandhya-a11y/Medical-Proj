@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Departments - Apollo Medical Center{% endblock %}
+{% block title %}Departments - Arogya Medical Center{% endblock %}
 
 {% block content %}
 <section class="page-header">
@@ -15,8 +15,8 @@
         <div class="departments-grid">
             {% for item in departments_with_images %}
             <div class="dept-card-large">
-                <div class="dept-header" style="background-image: url('{{ item.image }}'); background-size: contain; background-repeat: no-repeat; background-position: center;">
-                    <h2 style="margin-top:40px">{{ item.dept.name }}</h2>
+                <div class="dept-header" style="background: linear-gradient(135deg, rgba(0, 102, 204, 0.8) 0%, rgba(0, 68, 153, 0.8) 100%), url('{% if item.image %}{{ item.image }}{% else %}https://images.unsplash.com/photo-1576091160550-112173f7f869?w=300&q=80{% endif %}'); background-size: cover; background-position: center; background-blend-mode: overlay; min-height: 200px; display: flex; align-items: center; justify-content: center;">
+                    <h2 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); font-size: 28px; font-weight: 800; text-align: center;">{{ item.dept.name }}</h2>
                 </div>
                 <div class="dept-body">
                     <p>{{ item.dept.description }}</p>

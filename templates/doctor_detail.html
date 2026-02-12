@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Dr. {{ doctor.name }} - Apollo Medical Center{% endblock %}
+{% block title %}Dr. {{ doctor.name }} - Arogya Medical Center{% endblock %}
 
 {% block content %}
 <section class="doctor-detail-page">
@@ -11,7 +11,7 @@
                     {% if doctor.image %}
                         <img src="{{ doctor.image.url }}" alt="Dr. {{ doctor.name }}" class="doctor-detail-image">
                     {% else %}
-                        <img src="{{ fallback_doctor_image }}" alt="Dr. {{ doctor.name }}" class="doctor-detail-image" style="object-fit:cover;">
+                        <img src="https://images.unsplash.com/photo-1612349317150-e577a8a40aa0?w=400&q=80" alt="Dr. {{ doctor.name }}" class="doctor-detail-image" style="object-fit:cover;">
                     {% endif %}
                 <div class="doctor-contact-info">
                     <h3>Contact Information</h3>

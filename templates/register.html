@@ -1,59 +1,373 @@
-{% extends 'base.html' %}
+{% extends 'auth_base.html' %}
 
-{% block title %}Register - Apollo Medical Center{% endblock %}
+{% block title %}Register - Arogya Medical Center{% endblock %}
 
 {% block content %}
-<section class="page-header">
-    <div class="container">
-        <h1>Create Account</h1>
-        <p>Register to book appointments and manage your profile</p>
-    </div>
-</section>
+<div class="auth-container register-page">
+    <div class="auth-wrapper register-wrapper">
+        <!-- Left Side - Branding -->
+        <div class="auth-branding register-branding">
+            <div class="branding-content">
+                <div class="logo-section">
+                    <h1 class="brand-title">Join Arogya</h1>
+                    <p class="brand-subtitle">Hospital Management System</p>
+                </div>
+                <div class="register-info">
+                    <h2>Create Your Account</h2>
+                    <p>Join thousands of patients who trust us with their healthcare. Quick registration, secure and easy.</p>
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <span class="badge">1</span>
+                            <span>Complete Your Profile</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="badge">2</span>
+                            <span>Book Appointments</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="badge">3</span>
+                            <span>Get Quality Healthcare</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<section class="booking-section">
-    <div class="container">
-        <div class="booking-form-container">
-            <h2>Register</h2>
-            <form method="post" class="booking-form">
-                {% csrf_token %}
-                {{ form.non_field_errors }}
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="id_username">Username</label>
-                        {{ form.username }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_email">Email</label>
-                        {{ form.email }}
-                    </div>
+        <!-- Right Side - Registration Form -->
+        <div class="auth-form-section register-form-section">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h3>Create Account</h3>
+                    <p>Fill in your details to get started</p>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="id_first_name">First Name</label>
-                        {{ form.first_name }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_last_name">Last Name</label>
-                        {{ form.last_name }}
-                    </div>
+
+                <form method="post" class="auth-form register-form">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <!-- Account Information -->
+                    <fieldset class="form-section">
+                        <legend class="section-title">Account Information</legend>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="id_username">Username <span class="required">*</span></label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <small class="form-error">{{ form.username.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_email">Email <span class="required">*</span></label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <small class="form-error">{{ form.email.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="id_password1">Password <span class="required">*</span></label>
+                                {{ form.password1 }}
+                                {% if form.password1.errors %}
+                                    <small class="form-error">{{ form.password1.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_password2">Confirm Password <span class="required">*</span></label>
+                                {{ form.password2 }}
+                                {% if form.password2.errors %}
+                                    <small class="form-error">{{ form.password2.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Personal Information -->
+                    <fieldset class="form-section">
+                        <legend class="section-title">Personal Information</legend>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="id_first_name">First Name <span class="required">*</span></label>
+                                {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                    <small class="form-error">{{ form.first_name.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_last_name">Last Name <span class="required">*</span></label>
+                                {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                    <small class="form-error">{{ form.last_name.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="id_phone">Phone Number <span class="required">*</span></label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                    <small class="form-error">{{ form.phone.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_date_of_birth">Date of Birth</label>
+                                {{ form.date_of_birth }}
+                                {% if form.date_of_birth.errors %}
+                                    <small class="form-error">{{ form.date_of_birth.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="id_gender">Gender</label>
+                                {{ form.gender }}
+                                {% if form.gender.errors %}
+                                    <small class="form-error">{{ form.gender.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                            <div class="form-group">
+                                <label for="id_blood_group">Blood Group</label>
+                                {{ form.blood_group }}
+                                {% if form.blood_group.errors %}
+                                    <small class="form-error">{{ form.blood_group.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-row full-width">
+                            <div class="form-group">
+                                <label for="id_address">Address</label>
+                                {{ form.address }}
+                                {% if form.address.errors %}
+                                    <small class="form-error">{{ form.address.errors.0 }}</small>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <button type="submit" class="btn btn-primary btn-large">Create Account</button>
+                </form>
+
+                <div class="form-divider">
+                    <span>Already have an account?</span>
                 </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="id_password1">Password</label>
-                        {{ form.password1 }}
-                    </div>
-                    <div class="form-group">
-                        <label for="id_password2">Confirm Password</label>
-                        {{ form.password2 }}
-                    </div>
+
+                <div class="auth-links">
+                    <p><a href="{% url 'hospital_system:login' %}" class="link-primary">Sign in here</a></p>
                 </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Create Account</button>
-                    <a href="{% url 'hospital_system:login' %}" class="btn btn-secondary">Already have an account?</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</section>
+</div>
+
+<style>
+.register-wrapper {
+    grid-template-columns: 1fr 1fr;
+}
+
+.register-branding {
+    background: linear-gradient(135deg, #36c5f0 0%, #0284c7 100%);
+}
+
+.register-form-section {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.form-section {
+    border: none;
+    margin-bottom: 25px;
+    padding: 0;
+}
+
+.section-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #667eea;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.form-row.full-width {
+    grid-template-columns: 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.required {
+    color: #dc3545;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #36c5f0;
+    box-shadow: 0 0 0 3px rgba(54, 197, 240, 0.1);
+}
+
+.form-error {
+    color: #dc3545;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.register-info {
+    margin-top: 20px;
+}
+
+.register-info h2 {
+    font-size: 22px;
+    margin-bottom: 12px;
+}
+
+.register-info p {
+    font-size: 13px;
+    opacity: 0.95;
+    margin-bottom: 25px;
+    line-height: 1.5;
+}
+
+.benefits-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 968px) {
+    .register-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .auth-branding {
+        padding: 40px 30px;
+        min-height: 250px;
+    }
+
+    .register-form-section {
+        max-height: none;
+        padding: 40px 30px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .benefits-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .benefit-item {
+        flex: 0 1 45%;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 10px;
+    }
+
+    .auth-wrapper {
+        border-radius: 8px;
+    }
+
+    .auth-branding {
+        padding: 30px 20px;
+    }
+
+    .auth-form-section,
+    .register-form-section {
+        padding: 30px 20px;
+    }
+
+    .form-row {
+        gap: 10px;
+    }
+}
+</style>
 
 {% endblock %}

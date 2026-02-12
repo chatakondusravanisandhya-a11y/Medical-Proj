@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # Create Hospital
         hospital, _ = Hospital.objects.get_or_create(
-            name='Apollo Medical Center',
+            name='Arogya Medical Center',
             defaults={
                 'location': 'Ahmedabad, Gujarat',
                 'phone': '9876543210',

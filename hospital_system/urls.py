@@ -5,8 +5,9 @@ from . import views
 app_name = 'hospital_system'
 
 urlpatterns = [
-    # Home and main pages
-    path('', views.home, name='home'),
+    # Landing and main pages
+    path('', views.landing, name='landing'),
+    path('home/', views.home, name='home'),
     path('about/', views.about, name='about'),
     path('contact/', views.contact, name='contact'),
     
@@ -33,7 +34,9 @@ urlpatterns = [
     path('api/available-slots/', views.get_available_slots, name='get_available_slots'),
 
     # Authentication
-    path('accounts/login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/login/', views.login_user, name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(next_page='hospital_system:landing'), name='logout'),
     path('accounts/register/', views.register, name='register'),
+    path('dashboard/', views.patient_dashboard, name='patient_dashboard'),
+    path('profile/update/', views.update_profile, name='update_profile'),
 ]

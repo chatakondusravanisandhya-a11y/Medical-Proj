@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} the Arogya Medical Center{% endblock %}</title>
+    <title>{% block title %}Authentication - Arogya Medical Center{% endblock %}</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/premium-enhancements.css' %}">
@@ -14,32 +14,58 @@
             padding: 0;
             box-sizing: border-box;
         }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        main {
+            flex: 1;
+        }
+        
+        .auth-top-bar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 1rem 0;
+            color: white;
+        }
+        
+        .auth-top-bar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .auth-top-bar a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .auth-top-bar a:hover {
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
+    <!-- Authentication Top Bar -->
+    <div class="auth-top-bar">
         <div class="container">
-            <div class="navbar-brand">
-                <a href="{% url 'hospital_system:home' %}">
+            <div>
+                <a href="{% if user.is_authenticated %}{% url 'hospital_system:home' %}{% else %}{% url 'hospital_system:landing' %}{% endif %}">
                     <i class="fas fa-hospital"></i> the Arogya Medical Center
                 </a>
             </div>
-            <ul class="navbar-menu">
-                <li><a href="{% url 'hospital_system:home' %}">Home</a></li>
-                <li><a href="{% url 'hospital_system:departments' %}">Departments</a></li>
-                <li><a href="{% url 'hospital_system:doctors' %}">Doctors</a></li>
-                <li><a href="{% url 'hospital_system:services' %}">Services</a></li>
-                <li><a href="{% url 'hospital_system:about' %}">About</a></li>
-                <li><a href="{% url 'hospital_system:contact' %}">Contact</a></li>
+            <div>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'hospital_system:patient_dashboard' %}">{{ user.username }}</a></li>
-                    <li><a href="{% url 'hospital_system:logout' %}">Logout</a></li>
+                    <a href="{% url 'hospital_system:logout' %}">Logout</a>
+                {% else %}
+                    <a href="{% url 'hospital_system:landing' %}">Back</a>
                 {% endif %}
-                <li class="highlight"><a href="{% url 'hospital_system:book_appointment' %}">Book Appointment</a></li>
-            </ul>
+            </div>
         </div>
-    </nav>
+    </div>
 
     <!-- Main Content -->
     <main>
@@ -51,16 +77,21 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3> the Arogya Medical Center</h3>
+                    <h3>the Arogya Medical Center</h3>
                     <p>Providing excellence in healthcare with cutting-edge technology and dedicated medical professionals.</p>
                 </div>
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="{% url 'hospital_system:home' %}">Home</a></li>
-                        <li><a href="{% url 'hospital_system:departments' %}">Departments</a></li>
-                        <li><a href="{% url 'hospital_system:doctors' %}">Doctors</a></li>
-                        <li><a href="{% url 'hospital_system:services' %}">Services</a></li>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'hospital_system:home' %}">Home</a></li>
+                            <li><a href="{% url 'hospital_system:departments' %}">Departments</a></li>
+                            <li><a href="{% url 'hospital_system:doctors' %}">Doctors</a></li>
+                            <li><a href="{% url 'hospital_system:services' %}">Services</a></li>
+                        {% else %}
+                            <li><a href="{% url 'hospital_system:landing' %}">Back to Login</a></li>
+                            <li><a href="{% url 'hospital_system:contact' %}">Contact</a></li>
+                        {% endif %}
                     </ul>
                 </div>
                 <div class="footer-section">

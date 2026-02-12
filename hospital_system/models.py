@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 
 # Hospital Model
 class Hospital(models.Model):
@@ -28,6 +29,7 @@ class Department(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     icon = models.CharField(max_length=50, default='stethoscope', help_text='Font Awesome icon name')
+    image = models.ImageField(upload_to='departments/', blank=True, null=True, help_text='Department image or AI-generated picture')
     head_doctor = models.CharField(max_length=150, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -86,16 +88,17 @@ class Patient(models.Model):
         ('AB+', 'AB+'), ('AB-', 'AB-'),
     ]
     
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='patient', null=True, blank=True)
     name = models.CharField(max_length=150)
     email = models.EmailField()
     phone = models.CharField(max_length=15)
-    date_of_birth = models.DateField()
-    gender = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
-    blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES)
-    address = models.TextField()
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')], blank=True)
+    blood_group = models.CharField(max_length=3, choices=BLOOD_GROUP_CHOICES, blank=True)
+    address = models.TextField(blank=True)
     medical_history = models.TextField(blank=True)
-    emergency_contact = models.CharField(max_length=150)
-    emergency_phone = models.CharField(max_length=15)
+    emergency_contact = models.CharField(max_length=150, blank=True)
+    emergency_phone = models.CharField(max_length=15, blank=True)
     registered_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
